@@ -1,0 +1,260 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.1.50-community
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+--
+-- Create schema wvac
+--
+
+CREATE DATABASE IF NOT EXISTS wvac;
+USE wvac;
+
+--
+-- Definition of table `loan`
+--
+
+DROP TABLE IF EXISTS `loan`;
+CREATE TABLE `loan` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `UserID` int(10) unsigned NOT NULL,
+  `TypeOfLoan` varchar(45) NOT NULL,
+  `NoOfMonths` int(10) unsigned NOT NULL,
+  `LoanAmount` double NOT NULL,
+  `AdvanceIntrest` double NOT NULL,
+  `ServiceFee` double NOT NULL,
+  `NotarialFee` double NOT NULL,
+  `CBU` double NOT NULL,
+  `Balance` double DEFAULT NULL,
+  `MonthlyDue` double NOT NULL,
+  `DateRelease` datetime NOT NULL,
+  `DateDue` datetime NOT NULL,
+  `SchedDate` datetime DEFAULT NULL,
+  `Status` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `loan`
+--
+
+/*!40000 ALTER TABLE `loan` DISABLE KEYS */;
+INSERT INTO `loan` (`id`,`UserID`,`TypeOfLoan`,`NoOfMonths`,`LoanAmount`,`AdvanceIntrest`,`ServiceFee`,`NotarialFee`,`CBU`,`Balance`,`MonthlyDue`,`DateRelease`,`DateDue`,`SchedDate`,`Status`) VALUES 
+ (2,35,'Short Term',6,50000,500,1000,300,500,0,8333.33,'2017-03-13 00:00:00','2017-09-13 00:00:00',NULL,'FULLY PAID'),
+ (4,41,'Short Term',6,50000,500,1000,300,500,25000.01,8333.33,'2017-03-16 00:00:00','2017-09-16 00:00:00','2017-07-16 00:00:00','Pending');
+/*!40000 ALTER TABLE `loan` ENABLE KEYS */;
+
+
+--
+-- Definition of table `loanpayment`
+--
+
+DROP TABLE IF EXISTS `loanpayment`;
+CREATE TABLE `loanpayment` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `LoanId` int(10) unsigned NOT NULL,
+  `Interest` double NOT NULL,
+  `Fine` double NOT NULL,
+  `AmountPaid` double NOT NULL,
+  `PayDate` datetime NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `loanpayment`
+--
+
+/*!40000 ALTER TABLE `loanpayment` DISABLE KEYS */;
+INSERT INTO `loanpayment` (`ID`,`LoanId`,`Interest`,`Fine`,`AmountPaid`,`PayDate`) VALUES 
+ (8,2,324.22,0,8657.55,'0001-01-01 00:00:00'),
+ (9,2,0,0,23764.12,'0001-01-01 00:00:00'),
+ (10,4,500,166.67,9000,'2017-05-16 00:00:00'),
+ (11,4,416.67,166.67,8916.67,'2017-06-02 00:00:00'),
+ (12,4,333.33,166.67,8833.33,'2017-07-21 00:00:00');
+/*!40000 ALTER TABLE `loanpayment` ENABLE KEYS */;
+
+
+--
+-- Definition of table `membership`
+--
+
+DROP TABLE IF EXISTS `membership`;
+CREATE TABLE `membership` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `UserID` int(10) unsigned NOT NULL,
+  `Shares` int(10) unsigned NOT NULL,
+  `TotalAmount` double NOT NULL,
+  `Balance` double DEFAULT NULL,
+  `BeginDate` datetime NOT NULL,
+  `ModeOfPayment` varchar(45) NOT NULL,
+  `MonthsToPay` int(10) unsigned NOT NULL,
+  `MonthsPaid` int(10) unsigned DEFAULT NULL,
+  `MonthlyDue` double NOT NULL,
+  `SchedDate` datetime DEFAULT NULL,
+  `status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `membership`
+--
+
+/*!40000 ALTER TABLE `membership` DISABLE KEYS */;
+INSERT INTO `membership` (`ID`,`UserID`,`Shares`,`TotalAmount`,`Balance`,`BeginDate`,`ModeOfPayment`,`MonthsToPay`,`MonthsPaid`,`MonthlyDue`,`SchedDate`,`status`) VALUES 
+ (30,31,40,40000,0,'2017-03-10 00:00:00','Installment',3,3,10000,'2021-03-10 00:00:00','PAID'),
+ (34,35,40,40000,0,'2017-03-11 00:00:00','Installment',3,3,10000,NULL,'APPROVED'),
+ (37,38,40,40000,30000,'2017-03-15 00:00:00','Installment',36,NULL,9.33,'2017-04-15 00:00:00','Pending'),
+ (38,38,40,40000,9800,'2017-03-15 00:00:00','Installment',3,4,10000,'2022-03-15 00:00:00','Pending'),
+ (41,41,40,40000,0,'2017-03-15 00:00:00','Installment',3,3,10000,NULL,'APPROVED'),
+ (42,42,40,40000,-200,'2017-03-17 00:00:00','Installment',3,3,10000,'2021-03-17 00:00:00','Pending');
+/*!40000 ALTER TABLE `membership` ENABLE KEYS */;
+
+
+--
+-- Definition of table `mempayment`
+--
+
+DROP TABLE IF EXISTS `mempayment`;
+CREATE TABLE `mempayment` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `memID` int(10) unsigned NOT NULL,
+  `payDate` datetime NOT NULL,
+  `fine` double NOT NULL,
+  `amountPaid` double NOT NULL,
+  `cash` double NOT NULL,
+  `change` double NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mempayment`
+--
+
+/*!40000 ALTER TABLE `mempayment` DISABLE KEYS */;
+INSERT INTO `mempayment` (`ID`,`memID`,`payDate`,`fine`,`amountPaid`,`cash`,`change`) VALUES 
+ (1,11,'0001-01-01 00:00:00',0,0,4000,4000),
+ (2,11,'2017-11-25 00:00:00',0,0,4000,4000),
+ (3,11,'2017-03-25 00:00:00',66.6666666666666,3400,4000,4000),
+ (4,11,'2018-07-25 00:00:00',66.6666666666666,3400,4000,600.000000000004),
+ (5,11,'2017-11-25 00:00:00',66.6666666666666,3333.33333333333,4000,666.66666666667),
+ (6,11,'2017-03-25 00:00:00',67,3333,4000,667),
+ (7,11,'2017-07-25 00:00:00',67,3333,4000,667),
+ (8,11,'2017-11-25 00:00:00',67,3333,4000,667),
+ (9,11,'2020-03-06 00:00:00',0,3333,3500,167),
+ (10,11,'2020-07-06 00:00:00',0,3333,3500,167),
+ (11,11,'2020-03-06 00:00:00',0,3333,3500,167),
+ (12,11,'2020-07-06 00:00:00',67,3333,3500,167),
+ (13,12,'2018-03-08 00:00:00',0,8333,8500,167),
+ (14,12,'2019-03-08 00:00:00',0,8333,8500,167),
+ (15,12,'2020-03-08 00:00:00',0,8333,8500,167),
+ (16,13,'2018-03-08 00:00:00',0,10000,10000,0),
+ (17,13,'2019-03-08 00:00:00',0,10000,10000,0),
+ (18,13,'2020-03-08 00:00:00',0,10000,10000,0),
+ (19,30,'2018-03-11 00:00:00',0,10000,11000,1000),
+ (20,30,'2019-03-10 00:00:00',0,10000,10000,0),
+ (21,30,'2020-03-10 00:00:00',0,10000,10500,500),
+ (22,34,'2018-03-11 00:00:00',0,10000,10000,0),
+ (23,34,'2019-03-11 00:00:00',0,10000,10001,1),
+ (24,34,'2020-03-27 00:00:00',200,10000,10200,200),
+ (25,35,'2018-03-14 00:00:00',0,7000,7000,0),
+ (26,38,'2018-03-30 00:00:00',0,0,800,800),
+ (27,38,'2018-04-01 00:00:00',200,0,11000,11000),
+ (28,38,'2018-04-15 00:00:00',200,10000,11000,1000),
+ (29,38,'2018-04-03 00:00:00',200,10200,11000,800),
+ (30,41,'2018-03-16 00:00:00',0,10000,10000,0),
+ (31,41,'2018-03-16 00:00:00',0,10000,11000,1000),
+ (32,41,'2017-03-18 00:00:00',0,10000,10000,0),
+ (33,42,'2018-03-19 00:00:00',0,10000,10000,0),
+ (34,42,'2019-03-19 00:00:00',0,10000,19000,9000),
+ (35,42,'2020-04-03 00:00:00',200,10200,11000,800);
+/*!40000 ALTER TABLE `mempayment` ENABLE KEYS */;
+
+
+--
+-- Definition of table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `UserID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `firstName` varchar(45) NOT NULL,
+  `lastName` varchar(45) NOT NULL,
+  `age` varchar(45) NOT NULL,
+  `gender` varchar(45) NOT NULL,
+  `address` varchar(45) NOT NULL,
+  `contactNo` varchar(45) NOT NULL,
+  `emailAdd` varchar(45) NOT NULL,
+  `civilStatus` varchar(45) NOT NULL,
+  PRIMARY KEY (`UserID`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user`
+--
+
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` (`UserID`,`firstName`,`lastName`,`age`,`gender`,`address`,`contactNo`,`emailAdd`,`civilStatus`) VALUES 
+ (1,'Joa','Co','17','Female','Seoul','748','hehehe','Married'),
+ (2,'Marco','Alava','25','Male','Villa','546845','dsadasdsa','Married'),
+ (4,'Mae','Dagum','18','Female','Leganes','09344','sasasa','Single'),
+ (5,'Czarina','Agustin','27','Female','Oton','09156689','adasdwersf','Married'),
+ (6,'Nicole','Codilla','78','Female','jaro','59898454','imold','Single'),
+ (7,'Juan','Alava','99','Male','Villa','23478967','huhuhuhuoil','Single'),
+ (8,'Antonio','Alava','26','Male','tabuc suba','222222222','asdasfwerwerwr','Married'),
+ (9,'Joa','Juliano','50','Female','Seoul','546845','asakahahahaha','Single'),
+ (10,'Mae','Codilla','45','Female','Koring','09156689','adasdwersf','Married'),
+ (11,'Dave','Franco','27','Male','Joa\'s Heart','989868361','dave@yahoo.com','Married'),
+ (12,'Bruno','Mars','35','Male','NY','454154','gfhfdhdfhdfh','Single'),
+ (13,'Joa','Mars','56','Female','dghgdgjgd','446516','gsfgsfgsfg','Married'),
+ (14,'Taylor','Swift','28','Female','dghgdgjgd','53454366','hello@yahoo.com','Single'),
+ (15,'Taylor','Swift','28','Female','fgdhjdfgf','6576766','jkfksf@yahoo.com','Married'),
+ (16,'Tuyo','Nakami','55','Female','pls help','123446','huhu@web','Married'),
+ (17,'Mayi','Dag','17','Female','sadasdsa','sdsadasd','sads@fgdf','Married'),
+ (18,'Null','No More','25','Female','woooooooooo','325235452','YAS@hahaha','Married'),
+ (19,'what','why','15','Female','dwdwd','sadasd','sadasd@dws','Single'),
+ (20,'Awat','Awat','45','Male','sdsdsd','65515616','awat@awat','Single'),
+ (21,'Kaiyak','Bes','58','Female','zcasfasf','34234234','dfdsfsd@asaf','Married'),
+ (22,'Try','One','78','Female','sdasdasd','dasd','sdasd@asd','Married'),
+ (23,'Try','Two','15','Male','dwdwd','45345435','efe@ds','Single'),
+ (24,'Try','Three','15','Male','dwdwd','45345435','efe@ds','Single'),
+ (25,'Juan','Marco','25','Male','dfsdfsdf','45345345345','dfgdf@ef','Single'),
+ (26,'Juan','Antonio','56','Male','egerg','5345345','dfgfd@fv','Married'),
+ (27,'Pls','Work','45','Female','fsdfsd','34534','ffsd@fsd','Married'),
+ (28,'Pls ','Tamana','78','Female','fsfsfs','44354534','erter@gerg','Single'),
+ (29,'Hoy','Gana','25','Female','wewrwe','4543534','hj@jk','Married'),
+ (30,'Work','ThisTime','45','Female','dfgsfsdfsd','3234234324','fvdf@dfds','Single'),
+ (31,'Yas','Hoho','45','Female','dfgsfsdfsd','3234234324','fvdf@dfds','Single'),
+ (32,'Test','One','15','Male','dwdwd','5435345','dfsdf@fsd','Married'),
+ (33,'Test','Two','15','Female','lklklklklkl','4454564','frf@fe','Married'),
+ (34,'Antonio','Franco','25','Male','Koring','59898454','sdff@asada','Single'),
+ (35,'Gana','Pls','25','Male','jaro','14344','add@dd','Single'),
+ (36,'Nice','Hehe','45','Female','wewewe','59898454','add@dd','Married'),
+ (37,'Mae','Juan','25','Female','Seoul','09156689','add@dd','Married'),
+ (38,'William','Herondale','17','Male','Idris','09156689','iHateDucks@yahoo.com','Married'),
+ (39,'Teresa','Gray','19','Female','London','343354','books@yahoo.com','Married'),
+ (40,'Antonio','Agustin','19','Male','jaro','09344','add@dd','Single'),
+ (41,'Ba','Co','19','Female','Koring','222222222','dave@yahoo.com','Single'),
+ (42,'Joahnna','Codilla','18','Female','jaro','947505','joa@yahoo.com','Single');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
